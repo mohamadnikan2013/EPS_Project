@@ -1,11 +1,10 @@
-import numpy as np
+import math
+import os
+
 import matplotlib.pyplot as plt
+import numpy as np
 from scipy.spatial.qhull import ConvexHull
 from shapely.geometry.polygon import Polygon
-import os
-import math
-import plotly.plotly as py
-import plotly.graph_objs as go
 
 
 class NHull:
@@ -63,20 +62,18 @@ def estimating_the_distribution(vertex, samples):
         plt.savefig("static/NHull/sample" + str(i) + "/Hull.jpg")
         plt.close()
         data.append(p3.hull.volume)
-    y = [0 for i in range(10)]
+    y = [0 for i in range(200)]
     for i in data:
-        y[math.ceil(i / 0.1) - 1] += 1
-
-    data = [go.Bar(
-        x=['[0:0.1]', '[0.1:0.2]', '[0.2:0.3]', '[0.3:0.4]', '[0.4:0.5]', '[0.5:0.6]', '[0.6:0.7]', '[0.7:0.8]',
-           '[0.8:0.9]', '[0.9:1]', ],
-        y=y
-    )]
-
-    py.iplot(data, filename='basic-bar')
-
-    # if not os.path.exists("static/NHull/bar_chart/"):
-    #     os.makedirs("static/NHull/bar_chart/")
+        y[math.ceil(i / 0.005) - 1] += 1
+    y_pos = np.arange(200)
+    performance = y
+    plt.bar(y_pos, performance, align='center', alpha=1)
+    # plt.xticks(y_pos, objects)
+    # plt.show()
+    if not os.path.exists("static/NHull/bar_chart/"):
+        os.makedirs("static/NHull/bar_chart/")
+    plt.savefig("static/NHull/bar_chart/bar.jpg")
+    print(data)
 
 
-estimating_the_distribution(10, 10)
+estimating_the_distribution(10, 100)
