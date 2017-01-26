@@ -7,6 +7,7 @@ from scipy.spatial.qhull import ConvexHull
 from shapely.geometry.polygon import Polygon
 
 
+# TODO for all N and def only for distribution and else
 class NHull:
     def __init__(self, vertex):
         self.vertex = vertex
@@ -43,6 +44,7 @@ def estimating_the_distribution(vertex, samples):
         p1.generate_convex_hull()
         p2.generate_convex_hull()
         p3 = p1.subscription(p2)
+        # here for visualize and can removed for performance
         plt.plot(p1.points[:, 0], p1.points[:, 1], 'o')
         plt.plot(p2.points[:, 0], p2.points[:, 1], 'o')
         for simplex in p1.hull.simplices:
@@ -61,7 +63,7 @@ def estimating_the_distribution(vertex, samples):
             plt.plot(p3.points[simplex, 0], p3.points[simplex, 1], 'b-')
         plt.savefig("static/NHull/sample" + str(i) + "/Hull.jpg")
         plt.close()
-        data.append(p3.hull.volume)
+        data.append(p3.polygon.area)
     y = [0 for i in range(200)]
     for i in data:
         y[math.ceil(i / 0.005) - 1] += 1
@@ -76,4 +78,4 @@ def estimating_the_distribution(vertex, samples):
     print(data)
 
 
-estimating_the_distribution(10, 100)
+estimating_the_distribution(4000, 400)
