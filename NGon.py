@@ -118,10 +118,10 @@ class MyPolygon:
 
 
 p1 = MyPolygon(3)
-for i in range(3, 70):
+for i in range(3, 30):
     p1.sides = i
     print(p1.sides)
-    p1.generate_convex_hull_unit_circle(20)
+    p1.generate_convex_hull_unit_circle(1)
 y = []
 for i in p1.areas.values():
     y.append(np.mean(i))
