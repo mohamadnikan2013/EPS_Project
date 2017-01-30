@@ -117,39 +117,40 @@ class MyPolygon:
             # plt.show()
 
 
-p1 = MyPolygon(3)
-for i in range(3, 30):
-    p1.sides = i
-    print(p1.sides)
-    p1.generate_convex_hull_unit_circle(1)
-y = []
-for i in p1.areas.values():
-    y.append(np.mean(i))
+def start():
+    p1 = MyPolygon(3)
+    for i in range(3, 100):
+        p1.sides = i
+        print(p1.sides)
+        p1.generate_convex_hull_unit_circle(30)
+    y = []
+    for i in p1.areas.values():
+        y.append(np.mean(i))
 
-# make up some data in the interval ]0, 1[
-x = list(p1.areas.keys())
-# plot with various axes scales
-plt.figure(1)
+    # make up some data in the interval ]0, 1[
+    x = list(p1.areas.keys())
+    # plot with various axes scales
+    plt.figure(1)
 
-# linear
-plt.subplot(221)
-plt.plot(x, y)
-plt.yscale('linear')
-plt.title('linear')
-plt.grid(True)
+    # linear
+    plt.subplot(221)
+    plt.plot(x, y)
+    plt.yscale('linear')
+    plt.title('linear')
+    plt.grid(True)
 
-# log
-plt.subplot(222)
-plt.plot(x, y)
-plt.yscale('linear')
-plt.xscale('log')
-plt.title('log')
-plt.grid(True)
-# Format the minor tick labels of the y-axis into empty strings with
-# `NullFormatter`, to avoid cumbering the axis with too many labels.
-plt.gca().yaxis.set_minor_formatter(NullFormatter())
-# Adjust the subplot layout, because the logit one may take more space
-# than usual, due to y-tick labels like "1 - 10^{-3}"
-plt.subplots_adjust(top=0.92, bottom=0.08, left=0.10, right=0.95, hspace=0.25,
-                    wspace=0.35)
-plt.show()
+    # log
+    plt.subplot(222)
+    plt.plot(x, y)
+    plt.yscale('linear')
+    plt.xscale('log')
+    plt.title('log')
+    plt.grid(True)
+    # Format the minor tick labels of the y-axis into empty strings with
+    # `NullFormatter`, to avoid cumbering the axis with too many labels.
+    plt.gca().yaxis.set_minor_formatter(NullFormatter())
+    # Adjust the subplot layout, because the logit one may take more space
+    # than usual, due to y-tick labels like "1 - 10^{-3}"
+    plt.subplots_adjust(top=0.92, bottom=0.08, left=0.10, right=0.95, hspace=0.25,
+                        wspace=0.35)
+    plt.savefig("static/NGon/Circle.jpg")

@@ -3,12 +3,18 @@ import numpy as np
 
 
 class Predicting():
-    def __init__(self, deg, x, y, my_min, my_max):
-        self.y = y
-        self.x = x
+    def __init__(self, deg, x, y, my_min=None, my_max=None):
+        self.y = sorted(y)
+        self.x = sorted(x)
         self.deg = deg
-        self.my_min = my_min
-        self.my_max = my_max
+        if my_min:
+            self.my_min = float(my_min)
+        else:
+            self.my_min = float(min(self.x))
+        if my_max:
+            self.my_max = float(my_max)
+        else:
+            self.my_max = float(max(self.x))
         self.minimum_mean_square_error_coefficients = self.minimum_mean_square_error()
         self.method_of_moment_coefficients = self.method_of_moment()
         self.show()
@@ -23,12 +29,17 @@ class Predicting():
         for i in range(self.deg + 1):
             excepted = 0
             for k in range(len(self.x)):
-                excepted += np.power((self.x[k]), (i + 1)) * self.y[k]
+                try:
+                    excepted += np.power((self.x[k]), (i + 1)) * self.y[k] * (
+                        (self.x[k] - self.x[k - 1]) + (self.x[k] - self.x[k + 1])) / 2
+                except:
+                    # excepted += np.power((self.x[k]), (i + 1)) * self.y[k] * (self.x[1] - self.x[k])
+                    pass
             b[i] = excepted
             coefficients = []
             for j in range(self.deg + 1):
                 coefficients.append(
-                    (np.power(self.my_max, (j + i + 2)) - np.power(self.my_min, (j + i + 2))) / (j + i + 2))
+                    (np.math.pow(self.my_max, (j + i + 2)) - np.power(self.my_min, (j + i + 2))) / (j + i + 2))
             a[i] = coefficients
         x = np.linalg.solve(a, b)
         if np.allclose(np.dot(a, x), b):
@@ -48,17 +59,21 @@ class Predicting():
         pmm = np.poly1d(self.method_of_moment_coefficients)
         xp = np.linspace(self.my_min, self.my_max, 1000)
         plt.plot(self.x, self.y, '.', xp, pmmse(xp), '-', xp, pmm(xp), '--')
-        plt.xlim(min(0.9 * min(self.y), 1.1 * min(self.y)), 1.1 * max(self.x))
-        plt.ylim(min(0.9 * min(self.y), 1.1 * min(self.y)), 1.1 * max(self.y))
+        plt.xlim(min(0.9 * min(self.x), 1.1 * min(self.x)), 1.1 * max(self.x))
+        plt.ylim(min(0.2 * min(self.y), 5 * min(self.y)), 5 * max(self.y))
         plt.show()
+        plt.savefig("static/Pre/graph.jpg")
 
 
 def generate_data_from_uniform(my_min, my_max, n):
-    return list(np.random.uniform(my_min, my_max, n))
+    return list(np.random.uniform(my_min, my_max, n)), [1 / (my_max - my_min)] * n
 
 
 def generate_data_from_expotential(scale, n):
-    return list(np.random.exponential(scale, n))
+    x = list(np.random.exponential(scale, n))
+    y = [np.exp(i / scale) / scale for i in x]
+
+    return x, y
 
 
 """
@@ -76,14 +91,11 @@ this part get data from input
 # for i in lines:
 #     my_x.append(float(i[0]))
 #     my_y.append(float(i[1]))
-# inter = Interpolation(2, my_x, my_y, my_min, my_max)
+# inter = Predicting(3, my_x, my_y, my_min, my_max)
 
 """
 this part get data from data generator
 """
-x = generate_data_from_uniform(0, 10, 40)
-y = generate_data_from_uniform(0, 10, 40)
-# x = generate_data_from_expotential(10, 5000)
-# y = generate_data_from_expotential(10, 5000)
-pre = Predicting(10, x, y, min(x), max(x))
-# pre = Interpolation(70, x, y, 0, max(x))
+# x, y = generate_data_from_uniform(0, 1, 20)
+# x, y = generate_data_from_expotential(10, 500)
+# pre = Predicting(10, x, y, min(x), max(x))
