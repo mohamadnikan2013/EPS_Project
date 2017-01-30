@@ -50,15 +50,15 @@ def section2():
         p2.generate_convex_hull_unit_square(100)
         print(i)
 
-    for i in range(3, 20):
+    for i in range(3, 15):
         p3.sides = i
         p3.generate_convex_hull_unit_equilateral_triangle(100)
         print(i)
 
     rnd = np.random.randint(3, 20, 8, )
-    pre1 = Predicting(5, rnd, [np.mean(p1.areas[i]) for i in rnd])
-    pre2 = Predicting(5, rnd, [np.mean(p2.areas[i]) for i in rnd])
-    pre3 = Predicting(5, rnd, [np.mean(p3.areas[i]) for i in rnd])
+    pre1 = Predicting(30, rnd, [np.mean(p1.areas[i]) for i in rnd])
+    pre2 = Predicting(30, rnd, [np.mean(p2.areas[i]) for i in rnd])
+    pre3 = Predicting(30, rnd, [np.mean(p3.areas[i]) for i in rnd])
 
 
 section2()

@@ -33,8 +33,11 @@ class Predicting():
                     excepted += np.power((self.x[k]), (i + 1)) * self.y[k] * (
                         (self.x[k] - self.x[k - 1]) + (self.x[k] - self.x[k + 1])) / 2
                 except:
-                    # excepted += np.power((self.x[k]), (i + 1)) * self.y[k] * (self.x[1] - self.x[k])
-                    pass
+                    if (k == 0):
+                        excepted += np.power((self.x[k]), (i + 1)) * self.y[k] * (self.x[1] - self.x[k])
+                    if (k == len(self.x) - 1):
+                        excepted += np.power((self.x[k]), (i + 1)) * self.y[k] * (self.x[k] - self.x[k-1])
+
             b[i] = excepted
             coefficients = []
             for j in range(self.deg + 1):
@@ -59,10 +62,10 @@ class Predicting():
         pmm = np.poly1d(self.method_of_moment_coefficients)
         xp = np.linspace(self.my_min, self.my_max, 1000)
         plt.plot(self.x, self.y, '.', xp, pmmse(xp), '-', xp, pmm(xp), '--')
-        plt.xlim(min(0.9 * min(self.x), 1.1 * min(self.x)), 1.1 * max(self.x))
-        plt.ylim(min(0.2 * min(self.y), 5 * min(self.y)), 5 * max(self.y))
+        # plt.xlim(min(0.9 * min(self.x), 1.1 * min(self.x)), 1.1 * max(self.x))
+        # plt.ylim(min(0.2 * min(self.y), 5 * min(self.y)), 5 * max(self.y))
         plt.show()
-        plt.savefig("static/Pre/graph.jpg")
+        plt.savefig("static/Pre/graphobs.jpg")
 
 
 def generate_data_from_uniform(my_min, my_max, n):
@@ -79,23 +82,23 @@ def generate_data_from_expotential(scale, n):
 """
 this part get data from input
 """
-# fp = open("Observation.txt", 'r')
-# lines = []
-# for line in fp.readlines():
-#     lines.append((line.split()))
-# my_min = float(lines[0][0])
-# my_max = float(lines[0][1])
-# lines.pop(0)
-# my_x = []
-# my_y = []
-# for i in lines:
-#     my_x.append(float(i[0]))
-#     my_y.append(float(i[1]))
-# inter = Predicting(3, my_x, my_y, my_min, my_max)
+fp = open("Observation.txt", 'r')
+lines = []
+for line in fp.readlines():
+    lines.append((line.split()))
+my_min = float(lines[0][0])
+my_max = float(lines[0][1])
+lines.pop(0)
+my_x = []
+my_y = []
+for i in lines:
+    my_x.append(float(i[0]))
+    my_y.append(float(i[1]))
+inter = Predicting(3, my_x, my_y, my_min, my_max)
 
 """
 this part get data from data generator
 """
-# x, y = generate_data_from_uniform(0, 1, 20)
-# x, y = generate_data_from_expotential(10, 500)
-# pre = Predicting(10, x, y, min(x), max(x))
+# x, y = generate_data_from_uniform(0, 1, 20000)
+# # x, y = generate_data_from_expotential(1, 10000)
+# pre = Predicting(50, x, y, min(x), max(x))

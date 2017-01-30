@@ -2,6 +2,7 @@ from collections import defaultdict
 
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib import patches
 from matplotlib.ticker import NullFormatter
 from scipy.spatial.qhull import ConvexHull
 from shapely.geometry.point import Point
@@ -28,22 +29,22 @@ class MyPolygon:
                     self.points = np.concatenate((self.points, rand))
                     self.hull = ConvexHull(self.points)
                     self.polygon = Polygon(Polygon(self.points).convex_hull)
+                    self.areas[len(self.hull.vertices)].append(self.polygon.area)
 
-            self.areas[self.sides].append(self.polygon.area)
-
-            # fig, ax = plt.subplots()
-            # ax.add_patch(
-            #     patches.Rectangle(
-            #         (0, 0),  # (x,y)
-            #         1,  # width
-            #         1,  # height
-            #         facecolor="Black"
-            #     )
-            # )
-            # plt.plot(p1.points[:, 0], p1.points[:, 1], 'o')
-            # for simplex in self.hull.simplices:
-            #     plt.plot(p1.points[simplex, 0], p1.points[simplex, 1], 'white')
-            # plt.show()
+                    fig, ax = plt.subplots()
+                    ax.add_patch(
+                        patches.Rectangle(
+                            (0, 0),  # (x,y)
+                            1,  # width
+                            1,  # height
+                            facecolor="Black"
+                        )
+                    )
+                    plt.plot(self.points[:, 0], self.points[:, 1], 'o')
+                    for simplex in self.hull.simplices:
+                        plt.plot(self.points[simplex, 0], self.points[simplex, 1], 'white')
+                    plt.savefig("static/NGon/square/" + str(self.sides) + "-" + str(i) + ".jpg")
+                    plt.close()
 
     def generate_convex_hull_unit_circle(self, samples):
         for i in range(samples):
@@ -66,16 +67,16 @@ class MyPolygon:
                     self.points = np.concatenate((self.points, rand))
                     self.hull = ConvexHull(self.points)
                     self.polygon = Polygon(Polygon(self.points).convex_hull)
+                    self.areas[len(self.hull.vertices)].append(self.polygon.area)
 
-            self.areas[self.sides].append(self.polygon.area)
-
-            # fig, ax = plt.subplots()
-            # circle = plt.Circle((0.5, 0.5), .5, color="black")
-            # ax.add_artist(circle)
-            # plt.plot(p1.points[:, 0], p1.points[:, 1], 'o')
-            # for simplex in p1.hull.simplices:
-            #     plt.plot(p1.points[simplex, 0], p1.points[simplex, 1], 'white')
-            # plt.show()
+                    fig, ax = plt.subplots()
+                    circle = plt.Circle((0.5, 0.5), .5, color="black")
+                    ax.add_artist(circle)
+                    plt.plot(self.points[:, 0], self.points[:, 1], 'o')
+                    for simplex in self.hull.simplices:
+                        plt.plot(self.points[simplex, 0], self.points[simplex, 1], 'white')
+                    plt.savefig("static/NGon/circle/" + str(self.sides) + "-" + str(i) + ".jpg")
+                    plt.close()
 
     def generate_convex_hull_unit_equilateral_triangle(self, samples):
         for i in range(samples):
@@ -100,21 +101,22 @@ class MyPolygon:
                     self.points = np.concatenate((self.points, rand))
                     self.hull = ConvexHull(self.points)
                     self.polygon = Polygon(Polygon(self.points).convex_hull)
+                    self.areas[len(self.hull.vertices)].append(self.polygon.area)
 
-            self.areas[self.sides].append(self.polygon.area)
-            # fig, ax = plt.subplots()
-            # ax.add_patch(
-            #     patches.RegularPolygon(
-            #         (0.5, np.sqrt(3) / 6),
-            #         3,
-            #         np.sqrt(3) / 3,
-            #         facecolor="Black"
-            #     )
-            # )
-            # plt.plot(p1.points[:, 0], p1.points[:, 1], 'o')
-            # for simplex in self.hull.simplices:
-            #     plt.plot(p1.points[simplex, 0], p1.points[simplex, 1], 'white')
-            # plt.show()
+                    fig, ax = plt.subplots()
+                    ax.add_patch(
+                        patches.RegularPolygon(
+                            (0.5, np.sqrt(3) / 6),
+                            3,
+                            np.sqrt(3) / 3,
+                            facecolor="Black"
+                        )
+                    )
+                    plt.plot(self.points[:, 0], self.points[:, 1], 'o')
+                    for simplex in self.hull.simplices:
+                        plt.plot(self.points[simplex, 0], self.points[simplex, 1], 'white')
+                    plt.savefig("static/NGon/triangle/" + str(self.sides) + "-" + str(i) + ".jpg")
+                    plt.close()
 
 
 def start():
@@ -153,4 +155,7 @@ def start():
     # than usual, due to y-tick labels like "1 - 10^{-3}"
     plt.subplots_adjust(top=0.92, bottom=0.08, left=0.10, right=0.95, hspace=0.25,
                         wspace=0.35)
-    plt.savefig("static/NGon/Circle.jpg")
+    plt.savefig("static/NGon/circle.jpg")
+
+
+start()
